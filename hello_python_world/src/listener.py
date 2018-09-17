@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+# --- listener.py ------
+# Version vom 17.09.2018 by OJ
 import rospy
 from std_msgs.msg import String
 
