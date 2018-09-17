@@ -1,5 +1,6 @@
 #!/usr/bin/env python
-# license removed for brevity
+# --- talker.py ------
+# Version vom 17.09.2018 by OJ
 import rospy
 from std_msgs.msg import String
 
@@ -8,7 +9,7 @@ def talker():
     rospy.init_node('talker', anonymous=True)
     rate = rospy.Rate(10) # 10hz
     while not rospy.is_shutdown():
-        hello_str = "hello world %s" % rospy.get_time()
+        hello_str = "WHS - Hello python world %s" % rospy.get_time()
         rospy.loginfo(hello_str)
         pub.publish(hello_str)
         rate.sleep()
