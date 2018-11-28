@@ -5,6 +5,7 @@
 import sys
 from PyQt5.QtCore import (Qt, QTimer)
 from PyQt5.QtWidgets import (QWidget, QPushButton, QApplication, QLabel)
+from PyQt5.QtMultimedia import QSound
 
 import random
 
@@ -24,6 +25,12 @@ class Ui(QWidget):
         self.timer.start(1000) 
         self.toggleFlag = True;  
         self.initUI()
+        # Sounds aus http://codeperspectives.com/front-end/simon-says-sound/
+        self.sound_red= "sounds/a_sharp.wav"
+        self.sound_green= "sounds/c_sharp.wav"
+        self.sound_yellow= "sounds/d_sharp.wav"
+        self.sound_blue= "sounds/f_sharp.wav"
+           
     
     def initUI(self): 
         self.btn = [[QPushButton(self)  for s in range(S)] for r in range(R)] 
@@ -49,21 +56,25 @@ class Ui(QWidget):
                 self.btn[0][1].setStyleSheet("background-color: grey")
                 self.btn[1][0].setStyleSheet("background-color: grey")
                 self.btn[1][1].setStyleSheet("background-color: grey") 
+                QSound.play(self.sound_green)
             elif zf == 1:            
                 self.btn[0][0].setStyleSheet("background-color: grey")
                 self.btn[0][1].setStyleSheet("background-color: red")
                 self.btn[1][0].setStyleSheet("background-color: grey")
                 self.btn[1][1].setStyleSheet("background-color: grey") 
+                QSound.play(self.sound_red)
             elif zf== 2:            
                 self.btn[0][0].setStyleSheet("background-color: grey")
                 self.btn[0][1].setStyleSheet("background-color: grey")
                 self.btn[1][0].setStyleSheet("background-color: yellow")
                 self.btn[1][1].setStyleSheet("background-color: grey")
+                QSound.play(self.sound_yellow)
             elif zf == 3:            
                 self.btn[0][0].setStyleSheet("background-color: grey")
                 self.btn[0][1].setStyleSheet("background-color: grey")
                 self.btn[1][0].setStyleSheet("background-color: grey")
                 self.btn[1][1].setStyleSheet("background-color: blue")
+                QSound.play(self.sound_blue)
         else:
             self.toggleFlag = True # Alle Felder Grau
             self.btn[0][0].setStyleSheet("background-color: grey")
