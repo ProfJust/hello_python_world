@@ -5,6 +5,7 @@
 import sys
 from PyQt5.QtCore import (Qt, QTimer)
 from PyQt5.QtWidgets import (QWidget, QPushButton, QApplication, QLabel)
+# sudo apt-get install python-pyqt5.qtmultimedia
 from PyQt5.QtMultimedia import QSound
 
 import random
