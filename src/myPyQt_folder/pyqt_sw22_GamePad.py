@@ -1,14 +1,21 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
-##pyqt_sw21_QKeyEvent.py
+##pyqt_sw22_GamePad.py
 
-# https://www.tutorialspoint.com/pyqt/pyqt_qpixmap_class.htm
+
+
+# https://github.com/zeth/inputs
+# sudo pip install inputs
+# => DragonRise Inc.   Generic   USB  Joystick
+
 
 import sys
 from PyQt5.QtCore import (Qt, QTimer, QRect)
 from PyQt5.QtWidgets import (QWidget, QPushButton, QApplication, QLabel)
 from PyQt5.QtGui import QPainter, QColor, QFont
 from PyQt5.QtGui import QPixmap, QKeyEvent
+from inputs import devices
+from inputs import get_gamepad
 
 global ballsize
 ballsize = 40
@@ -31,7 +38,12 @@ class Ui(QWidget):
         super(Ui, self).__init__()  
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.update)  
-        self.timer.start(20)        
+        self.timer.start(20) 
+        #Gamepad
+        print("We have detected the following devices:\n")
+        for device in devices:
+            print(device)   
+                
         self.initUI()
     
     def initUI(self):         
@@ -74,6 +86,20 @@ class Ui(QWidget):
         p.drawRect(self.pos_keeper,570,keepersize*2,20)
         
     def update(self): 
+        # Gamepad lesen
+        events = get_gamepad()
+        for event in events:
+            #print(event.ev_type, event.code, event.state)
+            if event.code == 'ABS_Z' and event.state >= 140:
+                print('Right')
+                self.pos_keeper  = self.pos_keeper  + 5
+                break
+            if event.code == 'ABS_Z' and event.state <= 130:
+                print('Left')
+                self.pos_keeper  = self.pos_keeper  - 5
+                break
+            
+        
         self.pos_x = self.pos_x + self.speed_x
         self.pos_y = self.pos_y + self.speed_y
         if self.pos_x < 0:
@@ -94,11 +120,23 @@ class Ui(QWidget):
                 self.pos_y = self.pos_y + self.speed_y
                 
             else:
-                print("Game Over " + str(self.pos_x)+" " +str(self.pos_keeper ))
-                sys.exit()
+                pass
+                #print("Game Over " + str(self.pos_x)+" " +str(self.pos_keeper ))
+                #sys.exit()
                     
         self.repaint()
-    
+##    def event_loop(events):
+####        '''
+####        This function is called in a loop, and will get the events from the
+####        controller and send them to the functions we specify in the `event_lut`
+####        dictionary
+####        '''
+##        for event in events:
+##            print('\t', event.ev_type, event.code, event.state)
+##            call = event_lut.get(event.code)
+##            if callable(call):
+##               call(event.state)
+##    
 if __name__ == '__main__':    
     app = QApplication(sys.argv)
     ui = Ui()

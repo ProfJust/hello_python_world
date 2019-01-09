@@ -1,21 +1,17 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
-##pyqt_sw21_QKeyEvent.py
-
-# https://www.tutorialspoint.com/pyqt/pyqt_qpixmap_class.htm
+#pyqt_sw23_MouseEvent.py
 
 import sys
 from PyQt5.QtCore import (Qt, QTimer, QRect)
 from PyQt5.QtWidgets import (QWidget, QPushButton, QApplication, QLabel)
 from PyQt5.QtGui import QPainter, QColor, QFont
 from PyQt5.QtGui import QPixmap, QKeyEvent
-
 global ballsize
 ballsize = 40
 
 global keepersize
 keepersize = 50
-
 class Ui(QWidget):
     #statische Klassenvariablen
     pos_x = 200
@@ -23,6 +19,8 @@ class Ui(QWidget):
     pos_keeper = 200
     speed_x = +5
     speed_y = -6
+    mouse_pos_x = 0
+    mouse_pos_y = 0
     keyLeft = False
     keyRight = False
     
@@ -31,34 +29,57 @@ class Ui(QWidget):
         super(Ui, self).__init__()  
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.update)  
-        self.timer.start(20)        
+        #self.timer.start(20) 
         self.initUI()
     
     def initUI(self):         
         #UI-Fenster Konfigurieren
         self.setGeometry(30, 30, 600, 600)
-        self.setWindowTitle('Qt - Painter')
+        self.setWindowTitle('Qt - Mouse Event')
+        self.setMouseTracking(True)
         self.show()
+    
+    def mouseMoveEvent(self, event): #Methode der QWidget-Klasse
+        self.mouse_pos_x = event.x()
+        self.mouse_pos_y = event.y()
+        #print Mouse Position
+        print('x: %d  y: %d' % (self.mouse_pos_x, self.mouse_pos_y))
         
-    def paintEvent(self, event):
+    def mousePressEvent(self, event): #Methode der QWidget-Klasse
+        if  event.button()== Qt.LeftButton:
+            print('Linksklick')
+        if  event.button()== Qt.RightButton:
+            print("Rechtsklick")
+            
+    def mouseDoubleClickEvent(self, event): #Methode der QWidget-Klasse
+        if  event.button()== Qt.LeftButton:
+            print('Linksklick doppelt')
+            #self.showMaximized() #mit Titelzeile
+            self.showFullScreen() #ohne Titelzeile
+        if  event.button()== Qt.RightButton:
+            print("Rechtsklick doppelt")
+            self.showNormal() #urspruengiche Groesse
+            #self.showMinimized() #ganz weg
+            
+    def paintEvent(self, event): #Methode der QWidget-Klasse
         p = QPainter()
         p.begin(self)
         self.drawFunc(event, p)        
         p.end()
     
-    def keyPressEvent(self, event):
+    def keyPressEvent(self, event): #Methode der QWidget-Klasse
         if event.key() == Qt.Key_Left:
             self.keyLeft = True
         if event.key() == Qt.Key_Right:
             self.keyRight = True
             
-    def keyReleaseEvent(self, event):
+    def keyReleaseEvent(self, event): #Methode der QWidget-Klasse
         if event.key() == Qt.Key_Left:
              self.keyLeft = False
         if event.key() == Qt.Key_Right:
              self.keyRight = False
         event.accept()
-        
+    
     def drawFunc(self, event, p):            
         #Hintergrund mit Pixmap        
         pix = QPixmap("gras.jpg") 
@@ -73,12 +94,14 @@ class Ui(QWidget):
         p.setBrush(QColor(0, 0, 0))#RGB 
         p.drawRect(self.pos_keeper,570,keepersize*2,20)
         
+        
+        
     def update(self): 
         self.pos_x = self.pos_x + self.speed_x
         self.pos_y = self.pos_y + self.speed_y
         if self.pos_x < 0:
             self.speed_x = -self.speed_x
-        if self.pos_x > 600-ballsize:
+        if self.pos_x > 600 -ballsize:
             self.speed_x = -self.speed_x       
         if self.pos_y < 0:
             self.speed_y = -self.speed_y
@@ -94,11 +117,12 @@ class Ui(QWidget):
                 self.pos_y = self.pos_y + self.speed_y
                 
             else:
-                print("Game Over " + str(self.pos_x)+" " +str(self.pos_keeper ))
-                sys.exit()
+                pass
+                #print("Game Over " + str(self.pos_x)+" " +str(self.pos_keeper ))
+                #sys.exit()
                     
         self.repaint()
-    
+
 if __name__ == '__main__':    
     app = QApplication(sys.argv)
     ui = Ui()
