@@ -1,6 +1,6 @@
 ### JPG holen
 from PIL import Image
-""" für grosse Bilddateien notwendig"""
+""" fuer grosse Bilddateien notwendig"""
 """ https://stackoverflow.com/questions/12984426/python-pil-ioerror-image-file-truncated-with-big-images"""
 from PIL import ImageFile
 ImageFile.LOAD_TRUNCATED_IMAGES = True
