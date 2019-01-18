@@ -32,8 +32,11 @@ while True:
         img = Image.open(filestr)
         img.show()
         time.sleep(20)
-        #img.close()
-        # hide image
+        # img.close() funktioniert nicht, da separater Prozess
+        # =>
+        #https://stackoverflow.com/questions/6725099/how-can-i-close-an-image-shown-to-the-user-with-the-python-imaging-library
+        # psutil can get the pid of the display process created by im.show() and 
+        # kill the process with that pid on every operating system:
         for proc in psutil.process_iter():
             if proc.name() == "display":
                 proc.kill()
