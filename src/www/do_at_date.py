@@ -1,0 +1,40 @@
+# do_at_date.py
+import datetime
+import	time	
+### JPG holen
+from PIL import Image
+from PIL import ImageFile
+ImageFile.LOAD_TRUNCATED_IMAGES = True
+
+import urllib
+import psutil
+
+print(" Speichert alle 15 Minuten ein Bild von der Webcam ")
+
+while True:
+    heute = datetime.date.today()
+    now = datetime.datetime.now()
+    nowstr = str(heute.month)+' '+str(heute.day)+' '+str(now.hour)+' '+str(now.minute)
+    print('  aktuelle Zeit: ' + nowstr)
+    nochmin  = 15 - now.minute % 15
+    print(' noch '+str(nochmin)+' Minuten bis zum naechsten Bild ')
+    time.sleep(30)
+  
+    if(now.minute % 15 == 0):
+        filestr = 'bild'+nowstr+'.jpg'
+        website = urllib.urlopen('http://www.irs-alpsee-gruenten.de/se_data/_filebank/webcam/bbm.jpg')
+        jpgfile = open(filestr, 'wb')
+        webfile = website.read()
+        jpgfile.write(webfile)
+        website.close()
+        jpgfile.close()
+        #show Image
+        img = Image.open(filestr)
+        img.show()
+        time.sleep(20)
+        #img.close()
+        # hide image
+        for proc in psutil.process_iter():
+            if proc.name() == "display":
+                proc.kill()
+        
